@@ -8,8 +8,9 @@ c3_code = "SE222"
 c4_code = "SE221"
 c5_code = "SE532"
 
+
 # custom function
-def routine_exporter(starting_cell, ending_cell):
+def routine_exporter(starting_cell, ending_cell, sheet):
     print("8.30 - 10.00")
     for x in range (starting_cell, ending_cell):
             temp = str(sheet.cell_value(x, 1))
@@ -66,11 +67,55 @@ def routine_exporter(starting_cell, ending_cell):
                 output = "ROOM: {} COURSE: {} TEACHER -> {}"
                 print(output.format(roomNo, courseCode, assignedTeacher))
 
+
+def student_routine_viewer():
+    # Give the location of the file
+    loc = fd.askopenfilename()
+
+    # Changed to GUI
+    # To open Workbook
+    wb = xlrd.open_workbook(loc)
+    sheet = wb.sheet_by_index(0)
+    total_rows = sheet.nrows
+    # For row 0 and column 0
+    for x in range(total_rows):
+        temp = str(sheet.cell_value(x, 0))
+        # if temp.__contains__('SE2') or temp.__contains__('SWE2') :
+        # print(sheet.cell_value(x, 0))
+        if temp == "Sunday":
+            saturday_limit = x
+            print("\033[4m      SATURDAY      \033[0m")
+            routine_exporter(0, saturday_limit)
+
+        if temp == "Monday":
+            sunday_limit = x
+            print("\033[4m      SUNDAY       \033[0m")
+            routine_exporter(saturday_limit, sunday_limit)
+
+        if temp == "Tuesday":
+            monday_limit = x
+            print("\033[4m      MONDAY       \033[0m")
+            routine_exporter(sunday_limit, monday_limit)
+
+        if temp == "Wednesday":
+            tuesday_limit = x
+            print("\033[4m      TUESDAY       \033[0m")
+            routine_exporter(monday_limit, tuesday_limit)
+
+        if temp.__contains__("Thursday"):  # I don't know why this doesn't work normally
+            wednesday_limit = x
+            print("\033[4m      WEDNESDAY       \033[0m")
+            routine_exporter(tuesday_limit, wednesday_limit)
+
+            print("\033[4m      THURSDAY       \033[0m")
+            routine_exporter(wednesday_limit, total_rows)
+
+
 m = tkinter.Tk()
 m.title('SWE ROUTINE EXPORTER')
 m.geometry("500x500")
 
-m.resizable(0,0)
+m.resizable(0, 0)
 code1 = tkinter.StringVar()
 code2 = tkinter.StringVar()
 code3 = tkinter.StringVar()
@@ -103,13 +148,16 @@ sec.grid(row=5, column=1)
 
 
 button = tkinter.Button(m, text='Set and Go', width=15, command=m.destroy)
+teacher_button = tkinter.Button(m, text='View as Teacher', width=15, command=m.destroy)
 #button.pack()
-button.grid(row=10, column=1)
-
+button.grid(row=6, column=1)
+tkinter.Label(m, text="If you are a teacher").grid(row=11)
+tkinter.Label(m, text="You can also find your classes").grid(row=12)
+teacher_button.grid(row=13)
 
 m.mainloop()
 
-c1_code = code1.get().upper() # I know you can do mistakes :-)
+c1_code = code1.get().upper()# I know you can do mistakes :-)
 c2_code = code2.get().upper()
 c3_code = code3.get().upper()
 c4_code = code4.get().upper()
@@ -118,44 +166,3 @@ c5_code = code5.get().upper()
 
 
 
-
-# Give the location of the file
-loc = fd.askopenfilename()
-
-# Changed to GUI
-# To open Workbook
-wb = xlrd.open_workbook(loc)
-sheet = wb.sheet_by_index(0)
-total_rows = sheet.nrows
-# For row 0 and column 0
-for x in range (total_rows):
-    temp = str(sheet.cell_value(x, 0))
-   # if temp.__contains__('SE2') or temp.__contains__('SWE2') :
-   # print(sheet.cell_value(x, 0))
-    if temp == "Sunday":
-        saturday_limit = x
-        print("\033[4m      SATURDAY      \033[0m")
-        routine_exporter(0,saturday_limit)
-
-    if temp == "Monday":
-        sunday_limit = x
-        print("\033[4m      SUNDAY       \033[0m")
-        routine_exporter(saturday_limit, sunday_limit)
-
-    if temp == "Tuesday":
-        monday_limit = x
-        print("\033[4m      MONDAY       \033[0m")
-        routine_exporter(sunday_limit, monday_limit)
-
-    if temp == "Wednesday":
-        tuesday_limit = x
-        print("\033[4m      TUESDAY       \033[0m")
-        routine_exporter(monday_limit, tuesday_limit)
-
-    if temp.__contains__("Thursday"):  # I don't know why this doesn't work normally
-        wednesday_limit = x
-        print("\033[4m      WEDNESDAY       \033[0m")
-        routine_exporter(tuesday_limit, wednesday_limit)
-
-        print("\033[4m      THURSDAY       \033[0m")
-        routine_exporter(wednesday_limit, total_rows)
