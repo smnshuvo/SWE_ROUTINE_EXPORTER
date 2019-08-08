@@ -17,7 +17,7 @@ def routine_exporter(starting_cell, ending_cell, sheet, day):
 
     for x in range(starting_cell, ending_cell):
             temp = str(sheet.cell_value(x, 1))
-            if temp.__contains__(' A') and (temp.__contains__(c1_code) or temp.__contains__(c2_code) or temp.__contains__(c3_code) or temp.__contains__(c4_code) or temp.__contains__(c5_code)):
+            if temp.__contains__(section) and (temp.__contains__(c1_code) or temp.__contains__(c2_code) or temp.__contains__(c3_code) or temp.__contains__(c4_code) or temp.__contains__(c5_code)):
                 roomNo = (sheet.cell_value(x, 0)) # ROOM NO
                 courseCode = (sheet.cell_value(x, 1)), # Course Code
                 assignedTeacher = (sheet.cell_value(x, 2)) # Assigned Teacher
@@ -28,7 +28,7 @@ def routine_exporter(starting_cell, ending_cell, sheet, day):
     print("10.00 - 11.30")
     for x in range (starting_cell, ending_cell):
             temp = str(sheet.cell_value(x, 4))
-            if temp.__contains__(' A') and (temp.__contains__(c1_code) or temp.__contains__(c2_code) or temp.__contains__(c3_code) or temp.__contains__(c4_code) or temp.__contains__(c5_code)):
+            if temp.__contains__(section) and (temp.__contains__(c1_code) or temp.__contains__(c2_code) or temp.__contains__(c3_code) or temp.__contains__(c4_code) or temp.__contains__(c5_code)):
                 roomNo = (sheet.cell_value(x,3)) # ROOM NO
                 courseCode = (sheet.cell_value(x,4)), # Course Code
                 assignedTeacher = (sheet.cell_value(x,5)) # Assigned Teacher
@@ -38,7 +38,7 @@ def routine_exporter(starting_cell, ending_cell, sheet, day):
     print("11.30 - 1.00")
     for x in range(starting_cell, ending_cell):
             temp = str(sheet.cell_value(x, 7))
-            if temp.__contains__(' A') and (temp.__contains__(c1_code) or temp.__contains__(c2_code) or temp.__contains__(c3_code) or temp.__contains__(c4_code) or temp.__contains__(c5_code)):
+            if temp.__contains__(section) and (temp.__contains__(c1_code) or temp.__contains__(c2_code) or temp.__contains__(c3_code) or temp.__contains__(c4_code) or temp.__contains__(c5_code)):
                 roomNo = (sheet.cell_value(x,6)) # ROOM NO
                 courseCode = (sheet.cell_value(x,7)), # Course Code
                 assignedTeacher = (sheet.cell_value(x,8)) # Assigned Teacher
@@ -49,7 +49,7 @@ def routine_exporter(starting_cell, ending_cell, sheet, day):
     print("1.00 - 2.30")
     for x in range (starting_cell, ending_cell):
             temp = str(sheet.cell_value(x, 10))
-            if temp.__contains__(' A') and (temp.__contains__(c1_code) or temp.__contains__(c2_code) or temp.__contains__(c3_code) or temp.__contains__(c4_code) or temp.__contains__(c5_code)):
+            if temp.__contains__(section) and (temp.__contains__(c1_code) or temp.__contains__(c2_code) or temp.__contains__(c3_code) or temp.__contains__(c4_code) or temp.__contains__(c5_code)):
                 roomNo = (sheet.cell_value(x,9)) # ROOM NO
                 courseCode = (sheet.cell_value(x,10)), # Course Code
                 assignedTeacher = (sheet.cell_value(x,11)) # Assigned Teacher
@@ -59,7 +59,7 @@ def routine_exporter(starting_cell, ending_cell, sheet, day):
     print("2.30 - 4.00")
     for x in range (starting_cell, ending_cell):
             temp = str(sheet.cell_value(x, 13))
-            if temp.__contains__(' A') and (temp.__contains__(c1_code) or temp.__contains__(c2_code) or temp.__contains__(c3_code) or temp.__contains__(c4_code) or temp.__contains__(c5_code)):
+            if temp.__contains__(section) and (temp.__contains__(c1_code) or temp.__contains__(c2_code) or temp.__contains__(c3_code) or temp.__contains__(c4_code) or temp.__contains__(c5_code)):
                 roomNo = (sheet.cell_value(x,12)) # ROOM NO
                 courseCode = (sheet.cell_value(x,13)), # Course Code
                 assignedTeacher = (sheet.cell_value(x,14)) # Assigned Teacher
@@ -69,7 +69,7 @@ def routine_exporter(starting_cell, ending_cell, sheet, day):
     print("4.00 - 5.30")
     for x in range (starting_cell, ending_cell):
             temp = str(sheet.cell_value(x, 16))
-            if temp.__contains__(' A') and (temp.__contains__(c1_code) or temp.__contains__(c2_code) or temp.__contains__(c3_code) or temp.__contains__(c4_code) or temp.__contains__(c5_code)):
+            if temp.__contains__(section) and (temp.__contains__(c1_code) or temp.__contains__(c2_code) or temp.__contains__(c3_code) or temp.__contains__(c4_code) or temp.__contains__(c5_code)):
                 roomNo = (sheet.cell_value(x,15)) # ROOM NO
                 courseCode = (sheet.cell_value(x,16)), # Course Code
                 assignedTeacher = (sheet.cell_value(x,17)) # Assigned Teacher
@@ -89,12 +89,14 @@ def student_routine_viewer():
     global c3_code
     global c4_code
     global c5_code
+    global section
     # defined these as global variable
     c1_code = code1.get().upper()  # I know you can do mistakes :-)
     c2_code = code2.get().upper()
     c3_code = code3.get().upper()
     c4_code = code4.get().upper()
     c5_code = code5.get().upper()
+    section = ' ' + sect.get().upper()
     # Give the location of the file
     loc = fd.askopenfilename()
 
@@ -137,6 +139,7 @@ def student_routine_viewer():
             routine_exporter(wednesday_limit, total_rows, sheet, "Thursday")
 
 
+# Main method
 m = tkinter.Tk()
 m.title('SWE ROUTINE EXPORTER')
 m.geometry("500x500")
