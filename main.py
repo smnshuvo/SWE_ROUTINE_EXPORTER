@@ -1,25 +1,29 @@
 import xlrd
 from tkinter import filedialog as fd
 import tkinter
+from tkinter import messagebox
 
-c1_code = "SE224"
-c2_code = "SE223"
-c3_code = "SE222"
-c4_code = "SE221"
-c5_code = "SE532"
+# c1_code = "SE224"
+# c2_code = "SE223"
+# c3_code = "SE222"
+# c4_code = "SE221"
+# c5_code = "SE532"
 
 
 # custom function
-def routine_exporter(starting_cell, ending_cell, sheet):
+def routine_exporter(starting_cell, ending_cell, sheet, day):
+    final_output = ''
     print("8.30 - 10.00")
-    for x in range (starting_cell, ending_cell):
+
+    for x in range(starting_cell, ending_cell):
             temp = str(sheet.cell_value(x, 1))
             if temp.__contains__(' A') and (temp.__contains__(c1_code) or temp.__contains__(c2_code) or temp.__contains__(c3_code) or temp.__contains__(c4_code) or temp.__contains__(c5_code)):
-                roomNo = (sheet.cell_value(x,0)) # ROOM NO
-                courseCode = (sheet.cell_value(x,1)), # Course Code
-                assignedTeacher = (sheet.cell_value(x,2)) # Assigned Teacher
+                roomNo = (sheet.cell_value(x, 0)) # ROOM NO
+                courseCode = (sheet.cell_value(x, 1)), # Course Code
+                assignedTeacher = (sheet.cell_value(x, 2)) # Assigned Teacher
                 output = "ROOM: {} COURSE: {} TEACHER -> {}"
                 print(output.format(roomNo, courseCode, assignedTeacher))
+                final_output += "8.30 - 10.00 " + (output.format(roomNo, courseCode, assignedTeacher)) + "\n\n"
 
     print("10.00 - 11.30")
     for x in range (starting_cell, ending_cell):
@@ -30,8 +34,9 @@ def routine_exporter(starting_cell, ending_cell, sheet):
                 assignedTeacher = (sheet.cell_value(x,5)) # Assigned Teacher
                 output = "ROOM: {} COURSE: {} TEACHER -> {}"
                 print(output.format(roomNo, courseCode, assignedTeacher))
+                final_output += "10.00 - 11.30 " + (output.format(roomNo, courseCode, assignedTeacher)) + "\n\n"
     print("11.30 - 1.00")
-    for x in range (starting_cell, ending_cell):
+    for x in range(starting_cell, ending_cell):
             temp = str(sheet.cell_value(x, 7))
             if temp.__contains__(' A') and (temp.__contains__(c1_code) or temp.__contains__(c2_code) or temp.__contains__(c3_code) or temp.__contains__(c4_code) or temp.__contains__(c5_code)):
                 roomNo = (sheet.cell_value(x,6)) # ROOM NO
@@ -39,6 +44,8 @@ def routine_exporter(starting_cell, ending_cell, sheet):
                 assignedTeacher = (sheet.cell_value(x,8)) # Assigned Teacher
                 output = "ROOM: {} COURSE: {} TEACHER -> {}"
                 print(output.format(roomNo, courseCode, assignedTeacher))
+                final_output += "11.30 - 1.00 " + (output.format(roomNo, courseCode, assignedTeacher)) + "\n\n"
+
     print("1.00 - 2.30")
     for x in range (starting_cell, ending_cell):
             temp = str(sheet.cell_value(x, 10))
@@ -48,6 +55,7 @@ def routine_exporter(starting_cell, ending_cell, sheet):
                 assignedTeacher = (sheet.cell_value(x,11)) # Assigned Teacher
                 output = "ROOM: {} COURSE: {} TEACHER -> {}"
                 print(output.format(roomNo, courseCode, assignedTeacher))
+                final_output += "1.00 - 2.30 " + (output.format(roomNo, courseCode, assignedTeacher)) + "\n\n"
     print("2.30 - 4.00")
     for x in range (starting_cell, ending_cell):
             temp = str(sheet.cell_value(x, 13))
@@ -57,6 +65,7 @@ def routine_exporter(starting_cell, ending_cell, sheet):
                 assignedTeacher = (sheet.cell_value(x,14)) # Assigned Teacher
                 output = "ROOM: {} COURSE: {} TEACHER -> {}"
                 print(output.format(roomNo, courseCode, assignedTeacher))
+                final_output += "2.30 - 4.00 " + (output.format(roomNo, courseCode, assignedTeacher)) + "\n\n"
     print("4.00 - 5.30")
     for x in range (starting_cell, ending_cell):
             temp = str(sheet.cell_value(x, 16))
@@ -66,9 +75,26 @@ def routine_exporter(starting_cell, ending_cell, sheet):
                 assignedTeacher = (sheet.cell_value(x,17)) # Assigned Teacher
                 output = "ROOM: {} COURSE: {} TEACHER -> {}"
                 print(output.format(roomNo, courseCode, assignedTeacher))
+                final_output += "4.00 - 5.30 " + (output.format(roomNo, courseCode, assignedTeacher)) + "\n\n"
+    if final_output != '':
+        messagebox.showinfo(day, final_output)
+        # if there is no class on that day I don't wanna show that day
 
 
 def student_routine_viewer():
+    # Basically I have figured out that
+    # the function works as a reference
+    global c1_code
+    global c2_code
+    global c3_code
+    global c4_code
+    global c5_code
+    # defined these as global variable
+    c1_code = code1.get().upper()  # I know you can do mistakes :-)
+    c2_code = code2.get().upper()
+    c3_code = code3.get().upper()
+    c4_code = code4.get().upper()
+    c5_code = code5.get().upper()
     # Give the location of the file
     loc = fd.askopenfilename()
 
@@ -82,33 +108,33 @@ def student_routine_viewer():
         temp = str(sheet.cell_value(x, 0))
         # if temp.__contains__('SE2') or temp.__contains__('SWE2') :
         # print(sheet.cell_value(x, 0))
-        if temp == "Sunday":
+        if temp.__contains__("Sunday"):
             saturday_limit = x
             print("\033[4m      SATURDAY      \033[0m")
-            routine_exporter(0, saturday_limit)
+            routine_exporter(0, saturday_limit, sheet, "Saturday")
 
         if temp == "Monday":
             sunday_limit = x
             print("\033[4m      SUNDAY       \033[0m")
-            routine_exporter(saturday_limit, sunday_limit)
+            routine_exporter(saturday_limit, sunday_limit, sheet, "Sunday")
 
         if temp == "Tuesday":
             monday_limit = x
             print("\033[4m      MONDAY       \033[0m")
-            routine_exporter(sunday_limit, monday_limit)
+            routine_exporter(sunday_limit, monday_limit, sheet, "Monday")
 
         if temp == "Wednesday":
             tuesday_limit = x
             print("\033[4m      TUESDAY       \033[0m")
-            routine_exporter(monday_limit, tuesday_limit)
+            routine_exporter(monday_limit, tuesday_limit, sheet, "Tuesday")
 
         if temp.__contains__("Thursday"):  # I don't know why this doesn't work normally
             wednesday_limit = x
             print("\033[4m      WEDNESDAY       \033[0m")
-            routine_exporter(tuesday_limit, wednesday_limit)
+            routine_exporter(tuesday_limit, wednesday_limit, sheet, "Wednesday")
 
             print("\033[4m      THURSDAY       \033[0m")
-            routine_exporter(wednesday_limit, total_rows)
+            routine_exporter(wednesday_limit, total_rows, sheet, "Thursday")
 
 
 m = tkinter.Tk()
@@ -147,7 +173,7 @@ c5.grid(row=4, column=1)
 sec.grid(row=5, column=1)
 
 
-button = tkinter.Button(m, text='Set and Go', width=15, command=m.destroy)
+button = tkinter.Button(m, text='Set and Go', width=15, command=student_routine_viewer)
 teacher_button = tkinter.Button(m, text='View as Teacher', width=15, command=m.destroy)
 #button.pack()
 button.grid(row=6, column=1)
@@ -157,11 +183,7 @@ teacher_button.grid(row=13)
 
 m.mainloop()
 
-c1_code = code1.get().upper()# I know you can do mistakes :-)
-c2_code = code2.get().upper()
-c3_code = code3.get().upper()
-c4_code = code4.get().upper()
-c5_code = code5.get().upper()
+
 
 
 
