@@ -16,22 +16,28 @@ from tkinter import messagebox
 
 
 # custom function
+# @param starting_cell is the exact row number from where the
+# routine of a particular day starts
+# and ends at @param ending_cell
+# @param sheet is the excel sheet from where
+# we will be importing the data
+# @param day is only used to show the message box
 def routine_exporter(starting_cell, ending_cell, sheet, day):
     final_output = ''
     print("8.30 - 10.00")
     for x in range(starting_cell, ending_cell):
-            temp = str(sheet.cell_value(x, 1))
-            if section_checker(temp, section) and (
+        temp = str(sheet.cell_value(x, 1))  # temp is the temporary location for a cell
+        if section_checker(temp, section) and (  # checks the cell includes the section I am searching
                     temp.__contains__(c1_code) or temp.__contains__(c2_code) or temp.__contains__(
                     c3_code) or temp.__contains__(c4_code) or temp.__contains__(c5_code)):
+            """ Checks if it has any  of the five courses I searched """
                 roomNo = (sheet.cell_value(x, 0))  # ROOM NO
                 courseCode = (sheet.cell_value(x, 1)),  # Course Code
                 assignedTeacher = (sheet.cell_value(x, 2))  # Assigned Teacher
+            # Cell is like
+            """ [604AB][SE232 A][MSA]"""
                 output = "ROOM: {} COURSE: {} TEACHER -> {}"
                 print(output.format(roomNo, courseCode, assignedTeacher))
-
-                # Trying to make it an object
-                # class 1 refers to first class
                 final_output += "8.30 - 10.00 " + (output.format(roomNo, courseCode, assignedTeacher)) + "\n\n"
 
     print("10.00 - 11.30")
@@ -173,7 +179,7 @@ def section_checker(input, sec):
         return True
     elif input.__contains__(sec + '_'):  # SE232A_LAB1
         return True
-    elif input.endswith(sec):
+    elif input.endswith(sec):  # SE232A
         return True
     return False
 
